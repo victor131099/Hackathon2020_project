@@ -25,9 +25,16 @@ If the visitor is not wearing a face mask, the system will record this visitor's
 * Database: DynamoDB
 * Server: S3 Basket
 
-# Key Benefits
+# Challenges We Ran Into
+There were many challenges we met while making this project and one of them was doing real-time video face recognition. The second one is expanding the self check-in system into mobile check-in. We ran out of time while doing that so we have given up on it finally. Privacy issue is also a thing that we really need to consider when developing this project.
+
+# Accomplishments
 * The self-check-in system helps to free up reception staff time as well as reduce unnecessary physical interaction to avoid community transmission.
 * The management app is a very effective tool for the managers to control the situation of the venues in real-time and easily traceback when necessary. Automatic SMS function helps the notification process become much easier.
+* These 2 parts work smoothly together to deliver the best result for our customers.
+
+# What We Learned
+This project improved our ability to work in collaboration and manage time efficiently. We have learnt that creating a software product is not just about fancy front-end or complicated back-end. It is more about the value we can bring to our prospective customers.
 
 # Future Improvement
 * Integrate our self-check-in system with some kinds of temperature sensors for body temperature measurement
