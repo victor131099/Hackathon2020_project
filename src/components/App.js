@@ -141,8 +141,12 @@ class App extends Component {
     </div>
   );
 }else{
+  
     return(
-       <Route path = "/camera" component = {Camera}/>
+      <Content>
+<Route path = "/camera" component = {Camera}/>
+      </Content>
+       
     )
   }
   }

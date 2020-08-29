@@ -122,7 +122,7 @@ class Scan extends Component{
     
     
     this.props.history.push({pathname: "/camera",state:{ item:this.state.item, register: false}})
-    window.location.reload(false);
+    // window.location.reload(false);
     
   }
     render(){

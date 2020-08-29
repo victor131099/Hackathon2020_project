@@ -75,11 +75,11 @@ function Camera(props) {
       videoRef.current,
       offsets.x,
       offsets.y,
-  500,
-    500
-    );
-    classifyImg(context);
-    // console.log(document.getElementById("canvas"))
+      container.width,
+    container.height    
+  );
+    
+    console.log(document.getElementById("canvas"))
     var link = document.createElement("a");
   link.download = "image.png";
   // predict(canvasRef.current
@@ -134,7 +134,7 @@ function Camera(props) {
           }
         }
         // console.log("world")
-          if(props.hisotry.location.state.register === false){
+          if(props.history.location.state.register === false){
             axios.post(
             "https://fhrs5atn73.execute-api.ap-southeast-2.amazonaws.com/dev",
             {
@@ -173,8 +173,8 @@ function Camera(props) {
         phoneNumber: `${props.history.location.state.item.phone}`
       })
     }
-    props.history.push("/");
-    window.location.reload(false); 
+    // props.history.push("/");
+    // window.location.reload(false); 
         setLoading(false);
        
         console.log(results);
@@ -199,6 +199,7 @@ function Camera(props) {
       if(isCanvasEmpty){
         console.log(isCanvasEmpty)
         handleCapture();
+        classifyImg();
         handleClear();
         // const classifier= ml5.imageClassifier('MobileNet', modelLoaded);
         // setClassifier(classifier)
@@ -263,6 +264,7 @@ function Camera(props) {
 
   return (
     <Fragment>
+      
     <Measure bounds onResize={handleResize}>
       {({ measureRef }) => (
         <Wrapper>
@@ -293,7 +295,7 @@ function Camera(props) {
               ref={canvasRef}
               width={container.width}
               height={container.height}
-              id ="canvas"
+              
             />
 
             <Flash
@@ -308,19 +310,17 @@ function Camera(props) {
               <Fragment>
               <div>
               <h2 style= {{textAlign:"center"}}>Preview</h2>
-              <img  src = {linkBlob} id = "image"/>
+              <img   id = "image" src = {linkBlob}/>
               </div>
                 {
             loading  ?
-          <Spin/> : <div> Prediction: {weared_mask ? "The visitor wears mask" :"The visitor doesn't wear mask"}</div>
+          <Spin size="large"/> : <h2> Prediction: {weared_mask ? "The visitor wears a mask" :"The visitor doesn't wear a mask"}</h2>
           }
               </Fragment>
               
               
           }
-          <Button onClick= {onclick} > Go Back </Button>
-            
-
+          
         
           
 
