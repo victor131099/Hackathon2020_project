@@ -1,0 +1,105 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var util_1 = require("@antv/util");
+var shape_nodes_1 = tslib_1.__importDefault(require("../node/shape-nodes"));
+var responsive_1 = tslib_1.__importDefault(require("../responsive"));
+var base_1 = tslib_1.__importDefault(require("./base"));
+var SCALE_MAPPER = {
+    cat: 'category',
+    timeCat: 'category',
+    time: 'dateTime',
+    linear: 'linear',
+};
+var ApplyResponsiveAxis = /** @class */ (function (_super) {
+    tslib_1.__extends(ApplyResponsiveAxis, _super);
+    function ApplyResponsiveAxis() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ApplyResponsiveAxis.prototype.init = function () {
+        this.axisInstance = this.getAxisInstance();
+        _super.prototype.init.call(this);
+    };
+    ApplyResponsiveAxis.prototype.shouldApply = function () {
+        var options = this.plot.options;
+        if (!this.responsiveTheme.axis) {
+            return false;
+        }
+        if (this.responsiveTheme.axis[this.dim] &&
+            options[this.dim + "Axis"].visible &&
+            options[this.dim + "Axis"].label &&
+            options[this.dim + "Axis"].label.visible) {
+            return true;
+        }
+        return false;
+    };
+    ApplyResponsiveAxis.prototype.apply = function () {
+        var _this = this;
+        var rawLabels = this.plot.view.backgroundGroup.findAll(function (el) {
+            var name = el.get('name');
+            if (name === 'axis-label') {
+                var field = el.get('delegateObject').axis.get('field');
+                if (field === _this.plot.options[_this.dim + "Field"]) {
+                    return el;
+                }
+            }
+        });
+        var shapes = [];
+        for (var i = 0; i < rawLabels.length; i++) {
+            shapes.push(rawLabels[i]);
+        }
+        var shapeNodes = new shape_nodes_1.default({
+            shapes: shapes,
+        });
+        var _a = this.responsiveTheme.axis.x[this.type], constraints = _a.constraints, rules = _a.rules;
+        new responsive_1.default({
+            nodes: shapeNodes,
+            constraints: constraints,
+            region: this.plot.getViewRange(),
+            rules: rules,
+            plot: this.plot,
+            onEnd: function (nodes) {
+                _this.updateTicks(nodes.origion_nodes);
+            },
+        });
+    };
+    ApplyResponsiveAxis.prototype.getType = function () {
+        var props = this.plot.options;
+        var axis = this.dim + "Axis";
+        var field = this.dim + "Field";
+        if (props[axis] && props[axis].type && props[axis].type === 'dateTime') {
+            return 'dateTime';
+        }
+        var scaleType = this.plot.view.getScaleByField([props[field]]).type;
+        return SCALE_MAPPER[scaleType];
+    };
+    ApplyResponsiveAxis.prototype.getAxisInstance = function () {
+        var axisIndex = this.dim === 'x' ? 0 : 1;
+        var axis = this.plot.view.getController('axis').getComponents()[axisIndex].component;
+        return axis;
+    };
+    ApplyResponsiveAxis.prototype.updateTicks = function (nodes) {
+        var _this = this;
+        var tickLineContainer = this.plot.view.backgroundGroup.findAll(function (el) {
+            var name = el.get('name');
+            if (name === 'axis-tickline-group') {
+                var field = el.get('delegateObject').axis.get('field');
+                if (field === _this.plot.options[_this.dim + "Field"]) {
+                    return el;
+                }
+            }
+        })[0];
+        if (tickLineContainer) {
+            var tickShapes_1 = tickLineContainer.get('children');
+            util_1.each(nodes, function (n, index) {
+                if (n.shape.attr('text') === '') {
+                    tickShapes_1[index].attr('opacity', 0);
+                }
+            });
+        }
+        this.plot.canvas.draw();
+    };
+    return ApplyResponsiveAxis;
+}(base_1.default));
+exports.default = ApplyResponsiveAxis;
+//# sourceMappingURL=axis.js.map

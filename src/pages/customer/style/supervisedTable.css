@@ -1,0 +1,8 @@
+@import '~antd/dist/antd.css';
+
+#datepicker, #dateoption{
+    display: inline-block
+}
+#dateoption{
+    padding-left: 40px;
+}
